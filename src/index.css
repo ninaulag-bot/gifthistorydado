@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+/* ===== Design Tokens from Figma ===== */
+@theme {
+  /* Primary color scale */
+  --color-primary-100: #ebe7d4;
+  --color-primary-200: #ded7b6;
+  --color-primary-300: #d0c799;
+  --color-primary-400: #c3b77b;
+  --color-primary-500: #b6a75e;
+  --color-primary-600: #a09149;
+  --color-primary-700: #82773b;
+  --color-primary-800: #655c2e;
+  --color-primary-900: #484121;
+  --color-primary-950: #2a2613;
+
+  /* Legacy/alias colors (app compatibility) */
+  --color-cream: #FAF9F4;
+  --color-cream-1: #ebe7d4;   /* 1 shade darker than cream */
+  --color-cream-2: #ded7b6;   /* 2 shades darker than cream */
+  --color-bond-blue: #8CA9C4;
+  --color-midnight: #0F1A2E;
+  --color-gilded: #B3A28C;
+  --color-cashmere: #D8CEC1;
+  --color-sage: #A3B8A0;
+  --color-amber-warm: #C4A88C;
+
+  /* Font families */
+  --font-sans: "Karla", ui-sans-serif, system-ui, sans-serif;
+  --font-playfair: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-cormorant: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-avenir: "Avenir Next", Avenir, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Font sizes (scale 0-8) */
+  --text-0: 0.625rem;   /* 10px */
+  --text-1: 0.75rem;    /* 12px */
+  --text-2: 0.875rem;   /* 14px */
+  --text-3: 1rem;       /* 16px */
+  --text-4: 1.125rem;   /* 18px */
+  --text-5: 1.25rem;    /* 20px */
+  --text-6: 1.5rem;     /* 24px */
+  --text-7: 2.5rem;     /* 40px */
+  --text-8: 6rem;       /* 96px */
+
+  /* Font weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line heights */
+  --leading-16: 1rem;   /* 16px */
+  --leading-20: 1.25rem; /* 20px */
+  --leading-24: 1.5rem;  /* 24px - Scale.600 */
+  --leading-28: 1.75rem; /* 28px - Scale.700 */
+  --leading-32: 2rem;   /* 32px */
+  --leading-48: 3rem;    /* 48px - Scale.1000 */
+  --leading-100: 6.25rem; /* 100px - HERO */
+
+  /* Letter spacing */
+  --tracking-0: 0;
+  --tracking-1: 0.02em; /* 2% */
+  --tracking-refined: 0.08em;
+  --tracking-refined-wide: 0.14em;
+
+  /* Border radius */
+  --radius-card: 0px;
+}
+
+/* Typography component classes (Figma presets) */
+@layer components {
+  /* Label - 10px, Regular, Line 16 */
+  .font-label {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--text-0);
+    line-height: var(--leading-16);
+    letter-spacing: var(--tracking-0);
+  }
+
+  /* Eyebrow Label - 12px, SemiBold, Letter spacing 2% */
+  .font-eyebrow {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-1);
+    line-height: var(--leading-16);
+    letter-spacing: var(--tracking-1);
+  }
+
+  /* H1 - Cormorant 40px, Line 48 */
+  .font-h1 {
+    font-family: var(--font-cormorant);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--text-7);
+    line-height: var(--leading-48);
+  }
+
+  /* H2 - Cormorant 24px, Line 28 */
+  .font-h2 {
+    font-family: var(--font-cormorant);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--text-6);
+    line-height: var(--leading-28);
+  }
+
+  /* H3 - Cormorant 20px, Line 28 */
+  .font-h3 {
+    font-family: var(--font-cormorant);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--text-5);
+    line-height: var(--leading-28);
+  }
+
+  /* Hero Description - Karla 18px, Line 28 */
+  .font-hero-desc {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--text-4);
+    line-height: var(--leading-28);
+  }
+
+  /* Body small - Karla Light 14px */
+  .font-body-sm {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-light);
+    font-size: var(--text-2);
+    line-height: var(--leading-16);
+  }
+
+  .font-body-sm-bold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-2);
+    line-height: var(--leading-16);
+  }
+
+  .font-body-sm-semibold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-2);
+    line-height: var(--leading-16);
+  }
+
+  /* Body medium - Karla Light 16px */
+  .font-body-med {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-light);
+    font-size: var(--text-3);
+    line-height: var(--leading-24);
+  }
+
+  .font-body-med-semibold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-3);
+    line-height: var(--leading-32);
+  }
+
+  .font-body-med-bold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-3);
+    line-height: var(--leading-32);
+  }
+
+  /* Body large - Karla Light 20px */
+  .font-body-large {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-light);
+    font-size: var(--text-5);
+    line-height: var(--leading-32);
+  }
+
+  .font-body-large-bold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-5);
+    line-height: var(--leading-24);
+  }
+
+  .font-body-large-semibold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-5);
+    line-height: var(--leading-24);
+  }
+
+  /* Body xsmall - Karla Light 10px */
+  .font-body-xsm {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-light);
+    font-size: var(--text-0);
+    line-height: var(--leading-16);
+  }
+
+  .font-body-xsm-bold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-0);
+    line-height: var(--leading-16);
+  }
+
+  .font-body-xsm-semibold {
+    font-family: var(--font-sans);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-0);
+    line-height: var(--leading-16);
+  }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-color: #FAF9F4;
+}
+
+#root {
+  min-height: 100vh;
+}
