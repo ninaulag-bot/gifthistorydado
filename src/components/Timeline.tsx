@@ -1,32 +1,27 @@
-import { useState, useMemo, useEffect, useRef } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { GiftItem } from '../data/gifts'
+
+const copyShadow =
+  '[text-shadow:0_1px_2px_rgba(0,0,0,0.5),0_2px_8px_rgba(0,0,0,0.35)]'
+
+/** Uniform landscape cards: wide frame, `object-cover` fills the whole click target */
+const timelineCardSize =
+  'h-[220px] w-[320px] sm:h-[236px] sm:w-[360px]'
+
 interface TimelineProps {
   gifts: GiftItem[]
-  onGiftClick?: (gift: GiftItem) => void
 }
+
 interface GroupedGifts {
   year: string
   items: GiftItem[]
 }
-const MONTHS = [
-  'All Months',
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-]
+
 function parseDate(dateStr: string): Date {
   return new Date(dateStr)
 }
+
 function groupByYear(gifts: GiftItem[]): GroupedGifts[] {
   const sorted = [...gifts].sort(
     (a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime(),
@@ -44,224 +39,114 @@ function groupByYear(gifts: GiftItem[]): GroupedGifts[] {
       items,
     }))
 }
-const inputClass =
-  'w-full bg-white border border-cashmere px-3 py-2 text-sm text-midnight placeholder:text-gilded/50 focus:border-bond-blue focus:outline-none transition-colors'
-export function Timeline({ gifts, onGiftClick }: TimelineProps) {
-  const [selectedYear, setSelectedYear] = useState<string>('all')
-  const [selectedMonth, setSelectedMonth] = useState<number>(0)
-  const [yearOpen, setYearOpen] = useState(false)
-  const [monthOpen, setMonthOpen] = useState(false)
-  const yearRef = useRef<HTMLDivElement>(null)
-  const monthRef = useRef<HTMLDivElement>(null)
-  const availableYears = useMemo(() => {
-    const years = new Set(
-      gifts.map((g) => parseDate(g.date).getFullYear().toString()),
-    )
-    return ['all', ...Array.from(years).sort((a, b) => Number(b) - Number(a))]
-  }, [gifts])
-  const filteredGifts = useMemo(() => {
-    let result = [...gifts]
-    if (selectedYear !== 'all') {
-      result = result.filter(
-        (g) => parseDate(g.date).getFullYear().toString() === selectedYear,
-      )
-    }
-    if (selectedMonth > 0) {
-      result = result.filter(
-        (g) => parseDate(g.date).getMonth() === selectedMonth - 1,
-      )
-    }
-    return result
-  }, [gifts, selectedYear, selectedMonth])
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (yearRef.current && !yearRef.current.contains(e.target as Node)) {
-        setYearOpen(false)
-      }
-      if (monthRef.current && !monthRef.current.contains(e.target as Node)) {
-        setMonthOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-  const grouped = groupByYear(filteredGifts)
+
+function formatDateMonthDay(dateStr: string): string {
+  const d = parseDate(dateStr)
+  if (!Number.isNaN(d.getTime())) {
+    return d.toLocaleString('en-US', { month: 'long', day: 'numeric' })
+  }
+  return dateStr.trim()
+}
+
+export function Timeline({ gifts }: TimelineProps) {
+  const grouped = useMemo(() => groupByYear(gifts), [gifts])
+
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
-        <h2 className="font-cormorant font-normal text-[24px] text-midnight">
-          Timeline
-        </h2>
-
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div ref={yearRef} className="relative min-w-[120px]">
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => {
-                  setYearOpen(!yearOpen)
-                  setMonthOpen(false)
-                }}
-                className={`${inputClass} w-full text-left pl-3 pr-10 min-h-[38px] flex items-center`}
-              >
-                <span className="text-midnight">
-                  {selectedYear === 'all' ? 'All Years' : selectedYear}
-                </span>
-              </button>
-              <ChevronDown
-                className="absolute top-1/2 -translate-y-1/2 w-4 h-4 text-gilded pointer-events-none"
-                style={{ right: 12 }}
-                strokeWidth={1.6}
-              />
-            </div>
-            {yearOpen && (
-              <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-white border border-cashmere shadow-lg max-h-48 overflow-y-auto py-1">
-                {availableYears.map((year) => (
-                  <li key={year}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedYear(year)
-                        setYearOpen(false)
-                      }}
-                      className={`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-cream ${
-                        selectedYear === year ? 'text-midnight font-medium bg-cream' : 'text-midnight'
-                      }`}
-                    >
-                      {year === 'all' ? 'All Years' : year}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <div ref={monthRef} className="relative min-w-[140px]">
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => {
-                  setMonthOpen(!monthOpen)
-                  setYearOpen(false)
-                }}
-                className={`${inputClass} w-full text-left pl-3 pr-10 min-h-[38px] flex items-center`}
-              >
-                <span className="text-midnight">
-                  {MONTHS[selectedMonth]}
-                </span>
-              </button>
-              <ChevronDown
-                className="absolute top-1/2 -translate-y-1/2 w-4 h-4 text-gilded pointer-events-none"
-                style={{ right: 12 }}
-                strokeWidth={1.6}
-              />
-            </div>
-            {monthOpen && (
-              <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-white border border-cashmere shadow-lg max-h-48 overflow-y-auto py-1">
-                {MONTHS.map((month, i) => (
-                  <li key={month}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedMonth(i)
-                        setMonthOpen(false)
-                      }}
-                      className={`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-cream ${
-                        selectedMonth === i ? 'text-midnight font-medium bg-cream' : 'text-midnight'
-                      }`}
-                    >
-                      {month}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
-      </div>
+      <h2 className="mb-6 font-cormorant text-[24px] font-light text-midnight sm:mb-7">
+        Timeline
+      </h2>
 
       {grouped.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 sm:py-16 text-center">
-          <p className="font-cormorant font-normal text-[24px] text-midnight/40 mb-2">
+        <div className="flex flex-col items-center justify-center py-12 text-center sm:py-16">
+          <p className="mb-2 font-cormorant text-[24px] font-normal text-midnight/40">
             No gifts found
           </p>
-          <p className="text-gilded text-sm">
-            Try adjusting your year or month filter.
+          <p className="text-sm text-gilded">
+            Try a different view in the sidebar.
           </p>
         </div>
       ) : (
-        <div className="relative pl-6 sm:pl-8">
-          <div className="absolute left-[9px] sm:left-[11px] top-2 bottom-0 w-[2px] bg-gradient-to-b from-bond-blue to-bond-blue/20" />
-
+        <div className="flex flex-col gap-20 sm:gap-24">
           {grouped.map((group) => (
-            <div key={group.year} className="mb-6 sm:mb-8">
-              <div className="relative flex items-center mb-4 sm:mb-5">
-                <span className="absolute left-[-21px] sm:left-[-25px] w-[10px] h-[10px] rounded-full bg-bond-blue border-2 border-cream" />
-                <h3 className="font-cormorant font-normal text-xl text-midnight">
+            <section key={group.year} className="min-w-0">
+              <div className="-mt-1 mb-6 flex min-w-0 items-end gap-4 sm:mb-7 sm:gap-5">
+                <h3 className="shrink-0 -mt-1 font-cormorant text-[56px] font-light leading-[0.9] tracking-[0.06em] text-bond-blue/90 antialiased sm:-mt-2 sm:text-[60px] sm:tracking-[0.05em]">
                   {group.year}
                 </h3>
+                <div
+                  className="mb-2.5 h-px min-h-px flex-1 bg-bond-blue/25 sm:mb-3"
+                  aria-hidden
+                />
               </div>
 
-              <div className="space-y-3">
-                {group.items.map((gift) => {
-                  const isGiven = gift.direction === 'given'
-                  const dotColor = isGiven ? 'bg-bond-blue' : 'bg-amber-warm'
-                  const badgeColor = isGiven
-                    ? 'text-bond-blue bg-bond-blue/10'
-                    : 'text-amber-warm bg-amber-warm/10'
-                  return (
-                    <div key={gift.id} className="relative">
-                      <span
-                        className={`absolute left-[-19px] sm:left-[-23px] top-5 w-[6px] h-[6px] rounded-full ${dotColor}`}
-                      />
+              <div className="min-w-0">
+                <div
+                  className="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden px-1 pb-3 pt-0.5 sm:gap-5 sm:pb-4"
+                  style={{ WebkitOverflowScrolling: 'touch' }}
+                >
+                  {group.items.map((gift) => {
+                    const personLine = `${gift.person.name.toUpperCase()} · ${gift.person.relationship.toUpperCase()}`
+                    const occasionLine = `${gift.occasion} · ${formatDateMonthDay(gift.date)}`
 
-                      <div
-                        onClick={() => onGiftClick?.(gift)}
-                        className="bg-white border border-bond-blue rounded-card p-5 transition-all duration-300 hover:border-bond-blue/40 hover:shadow-[0_2px_12px_rgba(140,169,196,0.15)] hover:-translate-y-px cursor-pointer"
+                    return (
+                      <Link
+                        key={gift.id}
+                        to={`/gifts/${encodeURIComponent(gift.id)}`}
+                        aria-label={`${gift.name}, ${gift.occasion}`}
+                        className={`group relative isolate shrink-0 snap-start block overflow-hidden border-0 bg-midnight p-0 text-left text-inherit no-underline shadow-none outline-none ring-0 transition-[box-shadow] focus-visible:ring-2 focus-visible:ring-bond-blue focus-visible:ring-offset-2 focus-visible:ring-offset-white ${timelineCardSize}`}
                       >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-3 mb-1.5">
-                          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            {gift.imageUrl ? (
-                              <img
-                                src={gift.imageUrl}
-                                alt={gift.name}
-                                className="w-7 h-7 sm:w-8 sm:h-8 rounded object-cover flex-shrink-0"
-                              />
-                            ) : (
-                              <span className="text-lg sm:text-xl flex-shrink-0">
-                                {gift.emoji}
-                              </span>
-                            )}
-                            <span className="font-cormorant font-normal text-lg text-midnight truncate">
-                              {gift.name}
-                            </span>
+                        {gift.imageUrl ? (
+                          <img
+                            src={gift.imageUrl}
+                            alt=""
+                            className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 z-0 flex items-center justify-center bg-cashmere/85">
                             <span
-                              className={`flex-shrink-0 px-2 py-0.5 text-[9px] font-medium uppercase ${badgeColor}`}
-                              style={{
-                                letterSpacing: '0.1em',
-                              }}
+                              className="text-5xl opacity-90 sm:text-6xl"
+                              role="img"
+                              aria-hidden
                             >
-                              {gift.direction}
+                              {gift.emoji}
                             </span>
                           </div>
-                          <span className="text-gilded text-xs sm:text-sm flex-shrink-0 whitespace-nowrap font-sans">
-                            {gift.date}
-                          </span>
-                        </div>
+                        )}
+                        <div
+                          className="pointer-events-none absolute inset-0 z-[1] bg-bond-blue/40"
+                          aria-hidden
+                        />
+                        <div
+                          className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(to_top,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.45)_42%,transparent_68%)]"
+                          aria-hidden
+                        />
 
-                        <div className="flex items-center gap-2 text-xs sm:text-sm text-gilded font-sans">
-                          <span className="font-medium text-midnight/60">
-                            {gift.person.name}
-                          </span>
-                          <span>·</span>
-                          <span>{gift.occasion}</span>
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 px-4 pb-4 pt-12 sm:px-5 sm:pb-4 sm:pt-14">
+                          <div className="max-w-[85%] space-y-1 sm:space-y-1.5">
+                            <p
+                              className={`font-sans text-[9px] font-medium uppercase leading-normal tracking-[0.12em] text-white antialiased sm:text-[10px] ${copyShadow}`}
+                            >
+                              {personLine}
+                            </p>
+                            <h4
+                              className={`break-words font-cormorant text-[20px] font-normal not-italic leading-[1.06] tracking-normal text-white antialiased sm:text-[22px] ${copyShadow}`}
+                            >
+                              {gift.name}
+                            </h4>
+                            <p
+                              className={`font-sans text-[10px] font-light leading-snug text-white/92 antialiased sm:text-[11px] ${copyShadow}`}
+                            >
+                              {occasionLine}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  )
-                })}
+                      </Link>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
+            </section>
           ))}
         </div>
       )}

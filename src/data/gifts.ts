@@ -30,6 +30,13 @@ export interface AddressEntry {
   label?: string
 }
 
+export interface GiftPersonalNote {
+  id: string
+  body: string
+  /** Short display date, e.g. "February 14" */
+  date: string
+}
+
 export interface GiftItem {
   id: string
   name: string
@@ -45,6 +52,8 @@ export interface GiftItem {
   occasion: string
   source: 'dado' | 'manual'
   notes?: string
+  /** Timestamped journal entries on the gift detail page */
+  personalNotes?: GiftPersonalNote[]
   imageUrl?: string
   imageFit?: 'contain' | 'cover'
   imageAreaBg?: string
@@ -191,7 +200,18 @@ export const gifts: GiftItem[] = [
     date: 'November 15',
     occasion: 'Birthday',
     source: 'manual',
-    notes: 'Premium leather, left-handed',
+    personalNotes: [
+      {
+        id: 'golf-n1',
+        body: 'The most beautiful thing I have ever received. I have not taken it off since.',
+        date: 'February 14',
+      },
+      {
+        id: 'golf-n2',
+        body: 'Wore it with the silk dress to dinner. Perfect weight — not too heavy, not too delicate.',
+        date: 'February 15',
+      },
+    ],
     imageUrl: golfGlovesImg,
   },
   {

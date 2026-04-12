@@ -1,205 +1,206 @@
 import React, { useState, useMemo } from 'react'
+import { useLocation, useNavigate, matchPath } from 'react-router-dom'
 import { Header } from './components/Header'
-import { Sidebar } from './components/Sidebar'
-import { FilterBar } from './components/FilterBar'
+import { Sidebar, type SidebarNavigateTo } from './components/Sidebar'
 import { GiftList } from './components/GiftList'
 import { Timeline } from './components/Timeline'
-import { Relationships } from './components/Relationships'
-import { PersonProfile } from './components/PersonProfile'
+import { PersonProfilePage } from './components/PersonProfilePage'
 import { AddGiftModal } from './components/AddGiftModal'
 import { AddConnectionModal } from './components/AddConnectionModal'
-import { GiftDetailModal } from './components/GiftDetailModal'
+import { GiftDetailPage } from './components/GiftDetailPage'
 import {
   gifts as initialGifts,
   people as initialPeople,
   PersonData,
   GiftItem,
 } from './data/gifts'
-type ViewType =
-  | 'all-gifts'
-  | 'received'
-  | 'given'
-  | 'timeline'
-  | 'relationships'
+
+type ViewType = 'all-gifts' | 'timeline'
 type FilterType = 'all' | 'received' | 'given'
-export function App() {
+
+function App() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const giftRouteMatch = matchPath(
+    { path: '/gifts/:giftId', end: true },
+    location.pathname,
+  )
+  const peopleRouteMatch = matchPath(
+    { path: '/people/:personName', end: true },
+    location.pathname,
+  )
+
+  const sidebarActivePerson = peopleRouteMatch?.params.personName ?? null
+
   const [activeView, setActiveView] = useState<ViewType>('all-gifts')
-  const [activePerson, setActivePerson] = useState<string | null>(null)
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
-  const [searchQuery, setSearchQuery] = useState('')
   const [isAddGiftOpen, setIsAddGiftOpen] = useState(false)
   const [isAddConnectionOpen, setIsAddConnectionOpen] = useState(false)
   const [editingPerson, setEditingPerson] = useState<PersonData | null>(null)
   const [peopleList, setPeopleList] = useState<PersonData[]>(initialPeople)
   const [giftForPerson, setGiftForPerson] = useState<string | null>(null)
   const [giftsList, setGiftsList] = useState<GiftItem[]>(initialGifts)
-  const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null)
-  const [cameFromView, setCameFromView] = useState<ViewType | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
   const handleSavePerson = (updatedPerson: PersonData) => {
     if (editingPerson) {
       setPeopleList((prev) =>
         prev.map((p) => (p.name === editingPerson.name ? updatedPerson : p)),
       )
+      const m = matchPath(
+        { path: '/people/:personName', end: true },
+        location.pathname,
+      )
       if (
-        activePerson === editingPerson.name &&
+        m?.params.personName === editingPerson.name &&
         updatedPerson.name !== editingPerson.name
       ) {
-        setActivePerson(updatedPerson.name)
+        navigate(`/people/${encodeURIComponent(updatedPerson.name)}`, {
+          replace: true,
+        })
       }
     } else {
       setPeopleList((prev) => [...prev, updatedPerson])
     }
   }
-  const handleViewChange = (view: ViewType) => {
-    setActiveView(view)
-    setActivePerson(null)
-    setSearchQuery('')
-    if (view === 'received') {
-      setActiveFilter('received')
-      setActiveView('all-gifts')
-    } else if (view === 'given') {
-      setActiveFilter('given')
-      setActiveView('all-gifts')
-    } else {
+
+  const handleSidebarNavigate = (to: SidebarNavigateTo) => {
+    if (to === 'timeline') {
+      setActiveView('timeline')
       setActiveFilter('all')
+      navigate('/')
+      return
     }
+    setActiveView('all-gifts')
+    if (to === 'gifts-all') {
+      setActiveFilter('all')
+    } else if (to === 'gifts-given') {
+      setActiveFilter('given')
+    } else {
+      setActiveFilter('received')
+    }
+    navigate('/')
   }
+
+  const givenGiftCount = useMemo(
+    () => giftsList.filter((g) => g.direction === 'given').length,
+    [giftsList],
+  )
+  const receivedGiftCount = useMemo(
+    () => giftsList.filter((g) => g.direction === 'received').length,
+    [giftsList],
+  )
+
   const handlePersonChange = (person: string | null) => {
-    setActivePerson(person)
     if (person) {
       setActiveView('all-gifts')
       setActiveFilter('all')
-      setSearchQuery('')
+      navigate(`/people/${encodeURIComponent(person)}`)
+    } else {
+      navigate('/')
     }
   }
+
   const filteredGifts = useMemo(() => {
     let result = [...giftsList]
-    if (activePerson) {
-      result = result.filter((g) => g.person.name === activePerson)
-    }
     if (activeFilter === 'received') {
       result = result.filter((g) => g.direction === 'received')
     } else if (activeFilter === 'given') {
       result = result.filter((g) => g.direction === 'given')
     }
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase()
-      result = result.filter(
-        (g) =>
-          g.name.toLowerCase().includes(q) ||
-          g.person.name.toLowerCase().includes(q) ||
-          g.occasion.toLowerCase().includes(q),
-      )
-    }
     result.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     )
     return result
-  }, [activePerson, activeFilter, searchQuery, giftsList])
-  const effectiveView: ViewType = useMemo(() => {
-    if (activeView === 'timeline') return 'timeline'
-    if (activeView === 'relationships') return 'relationships'
-    if (activeFilter === 'received') return 'received'
-    if (activeFilter === 'given') return 'given'
-    return 'all-gifts'
-  }, [activeView, activeFilter])
+  }, [activeFilter, giftsList])
+
   const isGiftListView = activeView === 'all-gifts'
-  const activePersonData = activePerson
-    ? (peopleList.find((p) => p.name === activePerson) ?? null)
-    : null
+
+  const handleGiftSaved = (updatedGift: GiftItem) => {
+    setGiftsList((prev) =>
+      prev.map((g) => (g.id === updatedGift.id ? updatedGift : g)),
+    )
+  }
+
+  /** Full-screen gift detail: no archive header, sidebar, or main chrome */
+  if (giftRouteMatch) {
+    return (
+      <div className="h-dvh min-h-0 w-full overflow-hidden bg-cream font-sans">
+        <GiftDetailPage
+          key={giftRouteMatch.params.giftId}
+          giftsList={giftsList}
+          peopleList={peopleList}
+          onGiftSaved={handleGiftSaved}
+        />
+      </div>
+    )
+  }
+
+  let mainContent: React.ReactNode
+  if (peopleRouteMatch) {
+    mainContent = (
+      <PersonProfilePage
+        key={peopleRouteMatch.params.personName}
+        peopleList={peopleList}
+        giftsList={giftsList}
+        onEditPerson={(p) => {
+          setEditingPerson(p)
+          setIsAddConnectionOpen(true)
+        }}
+        onAddGift={(name) => {
+          setGiftForPerson(name)
+          setIsAddGiftOpen(true)
+        }}
+      />
+    )
+  } else {
+    mainContent = (
+      <>
+        {isGiftListView && (
+          <div className="-mx-5 flex min-h-0 flex-1 flex-col sm:-mx-8">
+            <GiftList gifts={filteredGifts} />
+          </div>
+        )}
+
+        {activeView === 'timeline' && (
+          <div className="min-h-0 flex-1">
+            <Timeline gifts={giftsList} />
+          </div>
+        )}
+      </>
+    )
+  }
+
   return (
-    <div className="flex flex-col h-screen bg-cream font-sans">
+    <div className="flex h-screen flex-col bg-cream font-sans">
       <Header
         totalGifts={giftsList.length}
         totalPeople={peopleList.length}
-        onAddGift={() => setIsAddGiftOpen(true)}
+        onAddGift={() => {
+          setGiftForPerson(null)
+          setIsAddGiftOpen(true)
+        }}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
       />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         <Sidebar
-          activeView={effectiveView}
-          onViewChange={handleViewChange}
-          activePerson={activePerson}
+          activeView={activeView}
+          activeFilter={activeFilter}
+          onNavigate={handleSidebarNavigate}
+          activePerson={sidebarActivePerson}
           onPersonChange={handlePersonChange}
           people={peopleList}
+          totalGiftCount={giftsList.length}
+          givenGiftCount={givenGiftCount}
+          receivedGiftCount={receivedGiftCount}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
         />
 
-        <main className="flex-1 overflow-y-auto px-5 sm:px-8 py-5 sm:py-6 lg:py-8 bg-cream">
-          {activePerson && activePersonData ? (
-            <PersonProfile
-              person={activePersonData}
-              gifts={giftsList}
-              onBack={() => {
-                setActivePerson(null)
-                if (cameFromView === 'relationships') {
-                  setActiveView('relationships')
-                }
-                setCameFromView(null)
-              }}
-              backLabel={
-                cameFromView === 'relationships'
-                  ? 'Back to Relationships'
-                  : undefined
-              }
-              onEditPerson={(p) => {
-                setEditingPerson(p)
-                setIsAddConnectionOpen(true)
-              }}
-              onAddGift={(name) => {
-                setGiftForPerson(name)
-                setIsAddGiftOpen(true)
-              }}
-              onGiftClick={(gift) => setSelectedGift(gift)}
-            />
-          ) : (
-            <>
-              {isGiftListView && (
-                <>
-                  <FilterBar
-                    activeFilter={activeFilter}
-                    onFilterChange={setActiveFilter}
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    onAddGift={() => setIsAddGiftOpen(true)}
-                  />
-                  <GiftList
-                    gifts={filteredGifts}
-                    onGiftClick={(gift) => setSelectedGift(gift)}
-                  />
-                </>
-              )}
-
-              {activeView === 'timeline' && (
-                <Timeline
-                  gifts={giftsList}
-                  onGiftClick={(gift) => setSelectedGift(gift)}
-                />
-              )}
-
-              {activeView === 'relationships' && (
-                <Relationships
-                  people={peopleList}
-                  gifts={giftsList}
-                  onPersonClick={(name) => {
-                    setCameFromView('relationships')
-                    setActivePerson(name)
-                    setActiveView('all-gifts')
-                    setActiveFilter('all')
-                    setSearchQuery('')
-                  }}
-                  onAddConnection={() => setIsAddConnectionOpen(true)}
-                  onAddGiftForPerson={(name) => {
-                    setGiftForPerson(name)
-                    setIsAddGiftOpen(true)
-                  }}
-                />
-              )}
-            </>
-          )}
+        <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white px-5 py-5 sm:px-8 sm:py-6 lg:py-8">
+          {mainContent}
         </main>
       </div>
 
@@ -225,21 +226,9 @@ export function App() {
         person={editingPerson}
         onSave={handleSavePerson}
       />
-
-      <GiftDetailModal
-        isOpen={!!selectedGift}
-        onClose={() => setSelectedGift(null)}
-        gift={selectedGift}
-        people={peopleList}
-        onSave={(updatedGift) => {
-          setGiftsList((prev) =>
-            prev.map((g) => (g.id === updatedGift.id ? updatedGift : g)),
-          )
-          setSelectedGift(updatedGift)
-        }}
-      />
     </div>
   )
 }
 
+export { App }
 export default App

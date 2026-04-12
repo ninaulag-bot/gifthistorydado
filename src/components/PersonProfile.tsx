@@ -20,7 +20,6 @@ interface PersonProfileProps {
   backLabel?: string
   onEditPerson?: (person: PersonData) => void
   onAddGift?: (personName: string) => void
-  onGiftClick?: (gift: GiftItem) => void
 }
 export function PersonProfile({
   person,
@@ -29,7 +28,6 @@ export function PersonProfile({
   backLabel,
   onEditPerson,
   onAddGift,
-  onGiftClick,
 }: PersonProfileProps) {
   const [activeTab, setActiveTab] = useState<ProfileTab>('details')
   const [giftFilter, setGiftFilter] = useState<GiftFilter>('all')
@@ -271,7 +269,7 @@ export function PersonProfile({
                   )}
                 </div>
                 {person.notes && (
-                  <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-cashmere">
+                  <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-bond-blue/35">
                     <button
                       onClick={() => setNotesExpanded(!notesExpanded)}
                       className="flex items-center gap-2 text-gilded hover:text-midnight transition-colors duration-300"
@@ -308,7 +306,7 @@ export function PersonProfile({
           <div
             role="group"
             aria-label="Filter gifts"
-            className="flex items-center border-b border-cashmere mb-5 sm:mb-6"
+            className="flex items-center border-b border-bond-blue/35 mb-5 sm:mb-6"
           >
             {(['all', 'given', 'received'] as GiftFilter[]).map((filter) => {
               const isActive = giftFilter === filter
@@ -355,7 +353,11 @@ export function PersonProfile({
                 }}
               >
                 {filtered.map((gift) => (
-                  <GiftCard key={gift.id} gift={gift} onClick={onGiftClick} />
+                  <GiftCard
+                    key={gift.id}
+                    gift={gift}
+                    to={`/gifts/${encodeURIComponent(gift.id)}`}
+                  />
                 ))}
               </div>
             )
