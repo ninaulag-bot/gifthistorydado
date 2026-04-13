@@ -1,10 +1,5 @@
 import { useMemo } from 'react'
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  matchPath,
-} from 'react-router-dom'
+import { Navigate, useLocation, matchPath } from 'react-router-dom'
 import { PersonProfile } from './PersonProfile'
 import { GiftItem, PersonData } from '../data/gifts'
 
@@ -22,7 +17,6 @@ export function PersonProfilePage({
   onAddGift,
 }: PersonProfilePageProps) {
   const { pathname } = useLocation()
-  const navigate = useNavigate()
   const routeMatch = matchPath(
     { path: '/people/:personName', end: true },
     pathname,
@@ -45,8 +39,6 @@ export function PersonProfilePage({
     <PersonProfile
       person={person}
       gifts={giftsList}
-      onBack={() => navigate('/')}
-      backLabel="My Gift History"
       onEditPerson={onEditPerson}
       onAddGift={onAddGift}
     />

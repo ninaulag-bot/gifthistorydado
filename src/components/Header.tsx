@@ -24,9 +24,6 @@ export function Header({
             <Menu className="h-5 w-5" strokeWidth={1.5} />
           </button>
           <div className="min-w-0">
-            <p className="mb-1.5 font-sans text-[11px] font-medium uppercase tracking-[0.14em] text-gilded">
-              Gift Archive
-            </p>
             <h1 className="font-cormorant text-[28px] font-light not-italic leading-tight text-midnight sm:text-[30px]">
               My <span className="italic">Gift</span> History
             </h1>
@@ -39,7 +36,7 @@ export function Header({
           <button
             type="button"
             onClick={onAddGift}
-            className="flex shrink-0 items-center gap-2 bg-bond-blue px-3 py-1.5 text-xs font-medium uppercase text-white transition-all duration-300 hover:bg-bond-blue/90 hover:shadow-md sm:px-4 sm:py-2"
+            className="flex shrink-0 items-center gap-2 bg-midnight px-3 py-1.5 text-xs font-medium uppercase text-white transition-all duration-300 hover:bg-midnight/90 hover:shadow-md sm:px-4 sm:py-2"
             style={{ letterSpacing: '0.08em' }}
           >
             <Plus className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />

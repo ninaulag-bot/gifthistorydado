@@ -1,6 +1,7 @@
 import React, { useState, useRef, useMemo, type CSSProperties } from 'react'
 import { X, UploadCloud, Camera } from 'lucide-react'
 import { GiftItem, PersonData } from '../data/gifts'
+import { giftDirEditFormToggleClass } from '../lib/giftDirectionTags'
 
 const OCCASIONS = [
   'Birthday',
@@ -159,7 +160,10 @@ export function GiftEditForm({
                 <button
                   type="button"
                   onClick={() => setEditDirection('given')}
-                  className={`px-4 py-2 text-xs font-medium uppercase transition-all duration-300 sm:px-5 ${editDirection === 'given' ? 'bg-midnight text-white shadow-sm' : 'text-gilded hover:text-midnight'}`}
+                  className={giftDirEditFormToggleClass(
+                    'given',
+                    editDirection === 'given',
+                  )}
                   style={labelStyle}
                 >
                   Given
@@ -167,7 +171,10 @@ export function GiftEditForm({
                 <button
                   type="button"
                   onClick={() => setEditDirection('received')}
-                  className={`px-4 py-2 text-xs font-medium uppercase transition-all duration-300 sm:px-5 ${editDirection === 'received' ? 'bg-midnight text-white shadow-sm' : 'text-gilded hover:text-midnight'}`}
+                  className={giftDirEditFormToggleClass(
+                    'received',
+                    editDirection === 'received',
+                  )}
                   style={labelStyle}
                 >
                   Received

@@ -50,7 +50,6 @@ export interface GiftItem {
   }
   date: string
   occasion: string
-  source: 'dado' | 'manual'
   notes?: string
   /** Timestamped journal entries on the gift detail page */
   personalNotes?: GiftPersonalNote[]
@@ -148,7 +147,6 @@ export const gifts: GiftItem[] = [
     },
     date: 'March 8',
     occasion: "Mother's Day",
-    source: 'manual',
     notes: 'Beautiful pink peonies from the garden',
     imageUrl: peonyBouquetImg,
   },
@@ -165,7 +163,6 @@ export const gifts: GiftItem[] = [
     },
     date: 'June 3',
     occasion: 'Birthday',
-    source: 'manual',
     notes: 'Ceramic mug from local artisan',
     imageUrl: handcraftedMugImg,
   },
@@ -182,7 +179,6 @@ export const gifts: GiftItem[] = [
     },
     date: 'August 22',
     occasion: 'Birthday',
-    source: 'manual',
     notes: 'Single-origin beans from Ethiopia',
     imageUrl: gourmetCoffeeImg,
   },
@@ -199,7 +195,6 @@ export const gifts: GiftItem[] = [
     },
     date: 'November 15',
     occasion: 'Birthday',
-    source: 'manual',
     personalNotes: [
       {
         id: 'golf-n1',
@@ -227,7 +222,6 @@ export const gifts: GiftItem[] = [
     },
     date: 'August 22',
     occasion: 'Housewarming',
-    source: 'manual',
     notes: 'Local artist, abstract landscape',
     imageUrl: artPrintImg,
   },

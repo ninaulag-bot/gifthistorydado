@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
+import { giftDirToggleBtnClass } from '../lib/giftDirectionTags'
 import {
   X,
   Link,
-  PencilLine,
   Loader2,
   Plus,
   UserPlus,
@@ -71,13 +71,11 @@ export function AddGiftModal({
   onAddPerson,
   preselectedPerson,
 }: AddGiftModalProps) {
-  const [inputMode, setInputMode] = useState<'link' | 'manual'>('link')
   const [productLink, setProductLink] = useState('')
   const [isLinkLoading, setIsLinkLoading] = useState(false)
   const [linkFetched, setLinkFetched] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [giftName, setGiftName] = useState('')
-  const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const cameraInputRef = useRef<HTMLInputElement>(null)
   const [direction, setDirection] = useState<'given' | 'received'>('given')
@@ -198,20 +196,6 @@ export function AddGiftModal({
     const file = e.target.files?.[0]
     if (file) handleFileSelect(file)
   }
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-    const file = e.dataTransfer.files?.[0]
-    if (file) handleFileSelect(file)
-  }
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-midnight/40"
@@ -261,7 +245,7 @@ export function AddGiftModal({
                         key={d}
                         type="button"
                         onClick={() => setDirection(d)}
-                        className={`font-sans text-[13px] font-medium uppercase px-3 py-2 border transition-all duration-300 outline-none hover:opacity-90 ${isActive ? 'border-bond-blue bg-bond-blue text-white' : 'border-cashmere bg-white text-gilded hover:border-bond-blue/50 hover:text-midnight'}`}
+                        className={giftDirToggleBtnClass(d, isActive)}
                         style={{ letterSpacing: '0.14em' }}
                       >
                         {d === 'given' ? 'GIVEN' : 'RECEIVED'}
@@ -441,36 +425,6 @@ export function AddGiftModal({
               Product Details
             </p>
             <div className="mt-3 sm:mt-4 space-y-4">
-              {/* Input mode choice */}
-              <div className="space-y-2">
-                <p className="font-sans text-[11px] font-medium normal-case text-gilded mb-1">
-                  How would you like to add this gift?
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setInputMode('link')}
-                    className={`flex items-center gap-1.5 font-sans text-[13px] font-medium uppercase px-3 py-2 border transition-all duration-300 outline-none hover:opacity-90 ${inputMode === 'link' ? 'border-bond-blue bg-bond-blue text-white' : 'border-cashmere bg-white text-gilded hover:border-bond-blue/50 hover:text-midnight'}`}
-                    style={{ letterSpacing: '0.14em' }}
-                  >
-                    <Link className="w-3.5 h-3.5" strokeWidth={1.8} />
-                    Paste a link
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setInputMode('manual')}
-                    className={`flex items-center gap-1.5 font-sans text-[13px] font-medium uppercase px-3 py-2 border transition-all duration-300 outline-none hover:opacity-90 ${inputMode === 'manual' ? 'border-bond-blue bg-bond-blue text-white' : 'border-cashmere bg-white text-gilded hover:border-bond-blue/50 hover:text-midnight'}`}
-                    style={{ letterSpacing: '0.14em' }}
-                  >
-                    <PencilLine className="w-3.5 h-3.5" strokeWidth={1.8} />
-                    Enter manually
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                {inputMode === 'link' ? (
-                  <>
                     <div>
                       <label className={labelClass} style={labelStyle}>
                         Product URL
@@ -637,137 +591,6 @@ export function AddGiftModal({
                         </>
                       )}
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <label className={labelClass} style={labelStyle}>
-                        The Gift{' '}
-                        <span
-                          className="text-bond-blue normal-case"
-                          style={{
-                            letterSpacing: '0.02em',
-                            fontSize: '9px',
-                          }}
-                        >
-                          (required)
-                        </span>
-                      </label>
-                      <input
-                        type="text"
-                        value={giftName}
-                        onChange={(e) => setGiftName(e.target.value)}
-                        placeholder="e.g. Candle, silk scarf"
-                        className={inputClass}
-                      />
-                    </div>
-
-                    <div className="mt-4">
-                      <label className={labelClass} style={labelStyle}>
-                        + Add Photo (Take or Upload)
-                      </label>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileInputChange}
-                        className="hidden"
-                      />
-                      <input
-                        ref={cameraInputRef}
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={handleFileInputChange}
-                        className="hidden"
-                      />
-
-                      {imageUrl ? (
-                        <div className="flex items-center gap-4 bg-white border border-cashmere p-5">
-                          <img
-                            src={imageUrl}
-                            alt="Gift preview"
-                            className="w-16 h-16 sm:w-20 sm:h-20 object-cover flex-shrink-0"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-midnight text-sm font-medium">
-                              Image added
-                            </p>
-                            <div className="flex flex-wrap gap-2 mt-1.5">
-                              <button
-                                type="button"
-                                onClick={() => fileInputRef.current?.click()}
-                                className="text-bond-blue text-xs hover:text-bond-blue/80 transition-colors"
-                              >
-                                Replace from library
-                              </button>
-                              <span className="text-gilded/30 text-xs">·</span>
-                              <button
-                                type="button"
-                                onClick={() => cameraInputRef.current?.click()}
-                                className="text-bond-blue text-xs hover:text-bond-blue/80 transition-colors"
-                              >
-                                Take new photo
-                              </button>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setImageUrl('')}
-                            className="text-gilded/50 hover:text-gilded transition-colors flex-shrink-0"
-                          >
-                            <X className="w-4 h-4" strokeWidth={1.6} />
-                          </button>
-                        </div>
-                      ) : (
-                        <>
-                          <div
-                            onDragOver={handleDragOver}
-                            onDragLeave={handleDragLeave}
-                            onDrop={handleDrop}
-                            className={`bg-white border-2 border-dashed flex flex-col items-center justify-center py-8 sm:py-10 px-5 transition-all duration-300 ${isDragging ? 'border-bond-blue bg-bond-blue/5' : 'border-cashmere'}`}
-                          >
-                            <UploadCloud
-                              className={`w-8 h-8 sm:w-10 sm:h-10 mb-3 ${isDragging ? 'text-bond-blue' : 'text-gilded/30'}`}
-                              strokeWidth={1.2}
-                            />
-                            <p className="text-midnight text-sm font-medium mb-1 text-center">
-                              {isDragging
-                                ? 'Drop image here'
-                                : 'Add a photo of this gift'}
-                            </p>
-                            <p className="text-gilded/50 text-xs text-center mb-4">
-                              Drag and drop, or use the button below
-                            </p>
-                            {/* Desktop: Upload Photo directly */}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                if (window.innerWidth < 640) {
-                                  setShowPhotoSheet(true)
-                                } else {
-                                  fileInputRef.current?.click()
-                                }
-                              }}
-                              className="flex items-center gap-2 border border-cashmere px-4 py-2 text-xs font-medium uppercase text-midnight hover:border-midnight/30 transition-colors"
-                              style={labelStyle}
-                            >
-                              <UploadCloud
-                                className="w-3.5 h-3.5"
-                                strokeWidth={1.8}
-                              />
-                              <span className="hidden sm:inline">
-                                Upload Photo
-                              </span>
-                              <span className="sm:hidden">Add Photo</span>
-                            </button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </>
-                )}
-              </div>
             </div>
           </div>
         </div>

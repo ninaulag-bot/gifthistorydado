@@ -1,5 +1,9 @@
 import { Plus } from 'lucide-react'
 import { PersonData, GiftItem } from '../data/gifts'
+import {
+  giftDirCountNumberClass,
+  giftDirCountRowClass,
+} from '../lib/giftDirectionTags'
 interface RelationshipsProps {
   people: PersonData[]
   gifts: GiftItem[]
@@ -69,31 +73,15 @@ export function Relationships({
               </div>
 
               <div className="flex items-center gap-3 mt-4">
-                <div className="bg-bond-blue/15 px-3 py-1.5 flex items-center gap-1.5">
-                  <p
-                    className="text-bond-blue text-[9px] font-medium uppercase"
-                    style={{
-                      letterSpacing: '0.12em',
-                    }}
-                  >
-                    Given
-                  </p>
-                  <p className="font-sans text-xs text-bond-blue font-medium">
-                    {givenCount}
-                  </p>
+                <div className={giftDirCountRowClass('given')}>
+                  <span style={{ letterSpacing: '0.12em' }}>Given</span>
+                  <span className={giftDirCountNumberClass}>{givenCount}</span>
                 </div>
-                <div className="bg-bond-blue/15 px-3 py-1.5 flex items-center gap-1.5">
-                  <p
-                    className="text-bond-blue text-[9px] font-medium uppercase"
-                    style={{
-                      letterSpacing: '0.12em',
-                    }}
-                  >
-                    Received
-                  </p>
-                  <p className="font-sans text-xs text-bond-blue font-medium">
+                <div className={giftDirCountRowClass('received')}>
+                  <span style={{ letterSpacing: '0.12em' }}>Received</span>
+                  <span className={giftDirCountNumberClass}>
                     {receivedCount}
-                  </p>
+                  </span>
                 </div>
               </div>
             </article>

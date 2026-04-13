@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { GiftItem } from '../data/gifts'
+import { giftDirPillClass } from '../lib/giftDirectionTags'
 
 const copyShadow =
   '[text-shadow:0_1px_2px_rgba(0,0,0,0.5),0_2px_8px_rgba(0,0,0,0.35)]'
@@ -71,7 +72,7 @@ export function Timeline({ gifts }: TimelineProps) {
           {grouped.map((group) => (
             <section key={group.year} className="min-w-0">
               <div className="-mt-1 mb-6 flex min-w-0 items-end gap-4 sm:mb-7 sm:gap-5">
-                <h3 className="shrink-0 -mt-1 font-cormorant text-[56px] font-light leading-[0.9] tracking-[0.06em] text-bond-blue/90 antialiased sm:-mt-2 sm:text-[60px] sm:tracking-[0.05em]">
+                <h3 className="shrink-0 -mt-1 font-cormorant text-[56px] font-light leading-[0.9] tracking-[0.02em] text-bond-blue/90 antialiased sm:-mt-2 sm:text-[60px] sm:tracking-[0.015em]">
                   {group.year}
                 </h3>
                 <div
@@ -88,6 +89,8 @@ export function Timeline({ gifts }: TimelineProps) {
                   {group.items.map((gift) => {
                     const personLine = `${gift.person.name.toUpperCase()} · ${gift.person.relationship.toUpperCase()}`
                     const occasionLine = `${gift.occasion} · ${formatDateMonthDay(gift.date)}`
+                    const isGiven = gift.direction === 'given'
+                    const dirLabel = isGiven ? 'GIVEN' : 'RECEIVED'
 
                     return (
                       <Link
@@ -96,6 +99,11 @@ export function Timeline({ gifts }: TimelineProps) {
                         aria-label={`${gift.name}, ${gift.occasion}`}
                         className={`group relative isolate shrink-0 snap-start block overflow-hidden border-0 bg-midnight p-0 text-left text-inherit no-underline shadow-none outline-none ring-0 transition-[box-shadow] focus-visible:ring-2 focus-visible:ring-bond-blue focus-visible:ring-offset-2 focus-visible:ring-offset-white ${timelineCardSize}`}
                       >
+                        <div className="pointer-events-none absolute left-3 top-3 z-20 sm:left-4 sm:top-4">
+                          <span className={giftDirPillClass(isGiven)}>
+                            {dirLabel}
+                          </span>
+                        </div>
                         {gift.imageUrl ? (
                           <img
                             src={gift.imageUrl}

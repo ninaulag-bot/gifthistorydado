@@ -209,6 +209,17 @@
   }
 }
 
+/* Native buttons: Karla, regular weight, 13px caps + tracking (site-wide) */
+@layer base {
+  button {
+    font-family: var(--font-sans) !important;
+    font-weight: var(--font-weight-regular) !important;
+    font-size: 0.8125rem !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+  }
+}
+
 html, body {
   margin: 0;
   padding: 0;

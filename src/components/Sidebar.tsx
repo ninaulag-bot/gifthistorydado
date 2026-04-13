@@ -26,12 +26,12 @@ interface SidebarProps {
 /** Left rule + blue type when selected; light gray tint behind selection. */
 const sidebarSelectedTint = 'bg-midnight/[0.06]'
 const giftNavRowBase =
-  'relative w-full flex items-center justify-between pl-3 pr-4 py-2 text-left font-sans border-l-2 transition-colors duration-200'
+  'relative w-full flex items-center justify-between pl-3 pr-4 py-2.5 text-left font-sans border-l-2 transition-colors duration-200'
 const giftNavRowInactive = `${giftNavRowBase} border-l-transparent text-gilded hover:text-midnight/60`
 const giftNavRowActive = `${giftNavRowBase} border-l-bond-blue text-bond-blue ${sidebarSelectedTint}`
 const sidebarTracking = 'tracking-[0.14em]'
-const navLabelClass = `text-xs uppercase ${sidebarTracking}`
-const navCountClass = `text-[13px] tabular-nums ${sidebarTracking}`
+const navLabelClass = `text-sm uppercase ${sidebarTracking}`
+const navCountClass = `text-[15px] tabular-nums ${sidebarTracking}`
 
 export function Sidebar({
   activeView,
@@ -164,13 +164,13 @@ export function Sidebar({
       <div className="border-t border-bond-blue/35 my-4" />
 
       <p
-        id="sidebar-people-heading"
+        id="sidebar-relationships-heading"
         className={`font-sans text-gilded font-normal ${navLabelClass} mb-3`}
       >
-        People
+        Relationships
       </p>
 
-      <nav aria-labelledby="sidebar-people-heading">
+      <nav aria-labelledby="sidebar-relationships-heading">
         {people.map((person) => {
           const isActive = activePerson === person.name
           return (

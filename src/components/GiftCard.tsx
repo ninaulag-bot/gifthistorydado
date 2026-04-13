@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { GiftItem } from '../data/gifts'
+import { giftDirPillClass } from '../lib/giftDirectionTags'
 
 const copyShadow =
   '[text-shadow:0_1px_2px_rgba(0,0,0,0.5),0_2px_8px_rgba(0,0,0,0.35)]'
@@ -57,16 +58,17 @@ export function GiftCard({
             className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0.35)_38%,transparent_72%)]"
             aria-hidden
           />
+        ) : gift.imageUrl ? (
+          <div
+            className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(to_top,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.45)_42%,transparent_68%)]"
+            aria-hidden
+          />
         ) : null}
       </div>
 
       {!editorial && (
         <div className="pointer-events-none absolute left-3 top-3 z-10 sm:left-4 sm:top-4">
-          <span
-            className={`rounded-sm bg-white/25 px-2.5 py-1 font-sans text-[10px] font-medium uppercase tracking-[0.12em] text-white antialiased backdrop-blur-[2px] ${copyShadow}`}
-          >
-            {directionLabel}
-          </span>
+          <span className={giftDirPillClass(isGiven)}>{directionLabel}</span>
         </div>
       )}
 
