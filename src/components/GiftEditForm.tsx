@@ -146,42 +146,12 @@ export function GiftEditForm({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-6 py-6 sm:px-8 sm:py-8">
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-6 py-6 sm:px-8 sm:py-8">
         <div>
           <p className={sectionLabelClass} style={labelStyle}>
             Gift Details
           </p>
-          <div className="mt-3 space-y-4 sm:mt-4">
-            <div>
-              <label className={labelClass} style={labelStyle}>
-                Direction
-              </label>
-              <div className="flex w-fit items-center gap-1 bg-cashmere/30 p-1">
-                <button
-                  type="button"
-                  onClick={() => setEditDirection('given')}
-                  className={giftDirEditFormToggleClass(
-                    'given',
-                    editDirection === 'given',
-                  )}
-                  style={labelStyle}
-                >
-                  Given
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditDirection('received')}
-                  className={giftDirEditFormToggleClass(
-                    'received',
-                    editDirection === 'received',
-                  )}
-                  style={labelStyle}
-                >
-                  Received
-                </button>
-              </div>
-            </div>
-
+          <div className="mt-2 space-y-3 sm:mt-3">
             <div ref={recipientInputRef} className="relative">
               <label className={labelClass} style={labelStyle}>
                 {editDirection === 'given' ? 'Gift Recipient' : 'Gift From'}{' '}
@@ -246,6 +216,36 @@ export function GiftEditForm({
                   )}
                 </div>
               )}
+            </div>
+
+            <div>
+              <label className={labelClass} style={labelStyle}>
+                Direction
+              </label>
+              <div className="flex w-fit items-center gap-1 bg-cashmere/30 p-1">
+                <button
+                  type="button"
+                  onClick={() => setEditDirection('given')}
+                  className={giftDirEditFormToggleClass(
+                    'given',
+                    editDirection === 'given',
+                  )}
+                  style={labelStyle}
+                >
+                  Given
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditDirection('received')}
+                  className={giftDirEditFormToggleClass(
+                    'received',
+                    editDirection === 'received',
+                  )}
+                  style={labelStyle}
+                >
+                  Received
+                </button>
+              </div>
             </div>
 
             <div>
@@ -342,7 +342,7 @@ export function GiftEditForm({
                   <img
                     src={editImageUrl}
                     alt={editName}
-                    className="h-16 w-16 flex-shrink-0 object-cover sm:h-20 sm:w-20"
+                    className="h-16 w-16 flex-shrink-0 rounded-none object-cover sm:h-20 sm:w-20"
                   />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-midnight">

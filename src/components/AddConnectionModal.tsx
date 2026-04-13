@@ -330,7 +330,7 @@ export function AddConnectionModal({
       aria-modal="true"
       aria-label="Add a Relationship"
     >
-      <div className="bg-[#faf9f4] border border-cashmere w-full max-w-3xl max-h-[95vh] sm:max-h-[90vh] flex flex-col relative sm:rounded-none rounded-t-2xl">
+      <div className="relative flex max-h-[95vh] w-full max-w-3xl flex-col border border-cashmere bg-[#faf9f4] sm:max-h-[90vh] rounded-none">
         {/* Close */}
         <button
           onClick={onClose}

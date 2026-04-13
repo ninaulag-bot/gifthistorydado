@@ -6,10 +6,6 @@ import { giftDirPillClass } from '../lib/giftDirectionTags'
 const copyShadow =
   '[text-shadow:0_1px_2px_rgba(0,0,0,0.5),0_2px_8px_rgba(0,0,0,0.35)]'
 
-/** Uniform landscape cards: wide frame, `object-cover` fills the whole click target */
-const timelineCardSize =
-  'h-[220px] w-[320px] sm:h-[236px] sm:w-[360px]'
-
 interface TimelineProps {
   gifts: GiftItem[]
 }
@@ -49,6 +45,70 @@ function formatDateMonthDay(dateStr: string): string {
   return dateStr.trim()
 }
 
+function TimelineGiftCard({ gift }: { gift: GiftItem }) {
+  const personLine = `${gift.person.name.toUpperCase()} · ${gift.person.relationship.toUpperCase()}`
+  const occasionLine = `${gift.occasion} · ${formatDateMonthDay(gift.date)}`
+  const isGiven = gift.direction === 'given'
+  const dirLabel = isGiven ? 'GIVEN' : 'RECEIVED'
+
+  return (
+    <Link
+      to={`/gifts/${encodeURIComponent(gift.id)}`}
+      aria-label={`${gift.name}, ${gift.occasion}`}
+      className="group relative isolate mx-0 block h-[220px] w-[320px] shrink-0 overflow-hidden rounded-none border-0 bg-midnight p-0 text-left text-inherit no-underline outline-none ring-0 transition-[box-shadow,transform] focus-visible:ring-2 focus-visible:ring-bond-blue focus-visible:ring-offset-2 focus-visible:ring-offset-white snap-start shadow-none"
+    >
+      <div className="pointer-events-none absolute left-3 top-3 z-20 sm:left-4 sm:top-4">
+        <span className={giftDirPillClass(isGiven)}>{dirLabel}</span>
+      </div>
+      {gift.imageUrl ? (
+        <img
+          src={gift.imageUrl}
+          alt=""
+          className="absolute inset-0 z-0 h-full w-full rounded-none object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        />
+      ) : (
+        <div className="absolute inset-0 z-0 flex items-center justify-center bg-cashmere/85">
+          <span
+            className="text-5xl opacity-90 sm:text-6xl"
+            role="img"
+            aria-hidden
+          >
+            {gift.emoji}
+          </span>
+        </div>
+      )}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] bg-bond-blue/40"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(to_top,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.45)_42%,transparent_68%)]"
+        aria-hidden
+      />
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 px-4 pb-4 pt-12 sm:px-5 sm:pb-4 sm:pt-14">
+        <div className="max-w-[85%] space-y-1 sm:space-y-1.5">
+          <p
+            className={`font-sans text-[9px] font-medium uppercase leading-normal tracking-[0.12em] text-white antialiased sm:text-[10px] ${copyShadow}`}
+          >
+            {personLine}
+          </p>
+          <h4
+            className={`break-words font-cormorant text-[20px] font-normal not-italic leading-[1.06] tracking-normal text-white antialiased sm:text-[22px] ${copyShadow}`}
+          >
+            {gift.name}
+          </h4>
+          <p
+            className={`font-sans text-[10px] font-light leading-snug text-white/92 antialiased sm:text-[11px] ${copyShadow}`}
+          >
+            {occasionLine}
+          </p>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
 export function Timeline({ gifts }: TimelineProps) {
   const grouped = useMemo(() => groupByYear(gifts), [gifts])
 
@@ -81,78 +141,14 @@ export function Timeline({ gifts }: TimelineProps) {
                 />
               </div>
 
-              <div className="min-w-0">
-                <div
-                  className="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden px-1 pb-3 pt-0.5 sm:gap-5 sm:pb-4"
-                  style={{ WebkitOverflowScrolling: 'touch' }}
-                >
-                  {group.items.map((gift) => {
-                    const personLine = `${gift.person.name.toUpperCase()} · ${gift.person.relationship.toUpperCase()}`
-                    const occasionLine = `${gift.occasion} · ${formatDateMonthDay(gift.date)}`
-                    const isGiven = gift.direction === 'given'
-                    const dirLabel = isGiven ? 'GIVEN' : 'RECEIVED'
-
-                    return (
-                      <Link
-                        key={gift.id}
-                        to={`/gifts/${encodeURIComponent(gift.id)}`}
-                        aria-label={`${gift.name}, ${gift.occasion}`}
-                        className={`group relative isolate shrink-0 snap-start block overflow-hidden border-0 bg-midnight p-0 text-left text-inherit no-underline shadow-none outline-none ring-0 transition-[box-shadow] focus-visible:ring-2 focus-visible:ring-bond-blue focus-visible:ring-offset-2 focus-visible:ring-offset-white ${timelineCardSize}`}
-                      >
-                        <div className="pointer-events-none absolute left-3 top-3 z-20 sm:left-4 sm:top-4">
-                          <span className={giftDirPillClass(isGiven)}>
-                            {dirLabel}
-                          </span>
-                        </div>
-                        {gift.imageUrl ? (
-                          <img
-                            src={gift.imageUrl}
-                            alt=""
-                            className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                          />
-                        ) : (
-                          <div className="absolute inset-0 z-0 flex items-center justify-center bg-cashmere/85">
-                            <span
-                              className="text-5xl opacity-90 sm:text-6xl"
-                              role="img"
-                              aria-hidden
-                            >
-                              {gift.emoji}
-                            </span>
-                          </div>
-                        )}
-                        <div
-                          className="pointer-events-none absolute inset-0 z-[1] bg-bond-blue/40"
-                          aria-hidden
-                        />
-                        <div
-                          className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(to_top,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.45)_42%,transparent_68%)]"
-                          aria-hidden
-                        />
-
-                        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 px-4 pb-4 pt-12 sm:px-5 sm:pb-4 sm:pt-14">
-                          <div className="max-w-[85%] space-y-1 sm:space-y-1.5">
-                            <p
-                              className={`font-sans text-[9px] font-medium uppercase leading-normal tracking-[0.12em] text-white antialiased sm:text-[10px] ${copyShadow}`}
-                            >
-                              {personLine}
-                            </p>
-                            <h4
-                              className={`break-words font-cormorant text-[20px] font-normal not-italic leading-[1.06] tracking-normal text-white antialiased sm:text-[22px] ${copyShadow}`}
-                            >
-                              {gift.name}
-                            </h4>
-                            <p
-                              className={`font-sans text-[10px] font-light leading-snug text-white/92 antialiased sm:text-[11px] ${copyShadow}`}
-                            >
-                              {occasionLine}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    )
-                  })}
-                </div>
+              {/* Horizontal strip: same card size + scroll on all breakpoints (matches former desktop) */}
+              <div
+                className="flex min-w-0 flex-row flex-nowrap gap-4 overflow-x-auto px-1 pb-3 pt-0.5 snap-x snap-mandatory"
+                style={{ WebkitOverflowScrolling: 'touch' }}
+              >
+                {group.items.map((gift) => (
+                  <TimelineGiftCard key={gift.id} gift={gift} />
+                ))}
               </div>
             </section>
           ))}

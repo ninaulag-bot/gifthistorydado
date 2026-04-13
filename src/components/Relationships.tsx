@@ -49,11 +49,11 @@ export function Relationships({
             <article
               key={person.name}
               onClick={() => onPersonClick?.(person.name)}
-              className="bg-white border border-cashmere rounded-card p-5 sm:p-6 transition-all duration-300 hover:border-bond-blue/40 hover:shadow-[0_2px_12px_rgba(140,169,196,0.15)] cursor-pointer"
+              className="bg-white border border-cashmere rounded-none p-5 sm:p-6 transition-all duration-300 hover:border-bond-blue/40 hover:shadow-[0_2px_12px_rgba(140,169,196,0.15)] cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <span
-                  className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${person.avatarColor}`}
+                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${person.avatarColor}`}
                 >
                   <span className="text-white text-sm font-semibold">
                     {person.initials}

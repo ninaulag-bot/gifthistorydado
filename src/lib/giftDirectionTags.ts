@@ -1,7 +1,7 @@
 /** Given / Received labels: Karla (`font-sans`), 400, uppercase; text #FAF9F4 (`text-cream`). */
 
 const giftDirPillBase =
-  'rounded-sm px-3 py-1.5 font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-cream antialiased'
+  'rounded-none px-3 py-1.5 font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-cream antialiased'
 
 export const giftDirPill10 = giftDirPillBase
 
@@ -14,7 +14,7 @@ export function giftDirPillClass(isGiven: boolean): string {
 
 /** Header count rows (Given / Received + number). */
 export function giftDirCountRowClass(kind: 'given' | 'received'): string {
-  return `flex items-center gap-2 rounded-sm px-3 py-1.5 font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-cream antialiased ${
+  return `flex items-center gap-2 rounded-none px-3 py-1.5 font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-cream antialiased ${
     kind === 'given' ? 'bg-[#6A7B8C]' : 'bg-[#C7B8A5]'
   }`
 }
@@ -24,7 +24,7 @@ export const giftDirCountNumberClass =
 
 /** Smaller count chips under the name on person profile (e.g. Mom · Mother). */
 export function giftDirCountRowProfileClass(kind: 'given' | 'received'): string {
-  return `flex items-center gap-1.5 rounded-sm px-2.5 py-1 font-sans text-[11px] font-normal uppercase tracking-[0.12em] text-cream antialiased ${
+  return `flex items-center gap-1.5 rounded-none px-2.5 py-1 font-sans text-[11px] font-normal uppercase tracking-[0.12em] text-cream antialiased ${
     kind === 'given' ? 'bg-[#6A7B8C]' : 'bg-[#C7B8A5]'
   }`
 }
@@ -34,7 +34,7 @@ export const giftDirCountNumberProfileClass =
 
 /** Add-gift / detail edit: caps toggles. */
 export const giftDirToggleBtnBase =
-  'rounded-sm font-sans text-[15px] font-normal uppercase px-3.5 py-2.5 border transition-all duration-300 outline-none'
+  'rounded-none font-sans text-[15px] font-normal uppercase px-3.5 py-2.5 border transition-all duration-300 outline-none'
 
 export function giftDirToggleBtnClass(
   kind: 'given' | 'received',
@@ -52,7 +52,7 @@ export function giftDirToggleBtnClass(
 
 /** GiftEditForm: slightly larger padding. */
 export const giftDirEditFormToggleBase =
-  'rounded-sm px-5 py-2.5 font-sans text-sm font-normal uppercase transition-all duration-300 sm:px-6'
+  'rounded-none px-5 py-2.5 font-sans text-sm font-normal uppercase transition-all duration-300 sm:px-6'
 
 export function giftDirEditFormToggleClass(
   kind: 'given' | 'received',

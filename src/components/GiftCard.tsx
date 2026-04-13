@@ -28,7 +28,7 @@ export function GiftCard({
   const occasionLine = `${gift.occasion} · ${gift.date}`
 
   const articleBase =
-    'group relative isolate h-full min-h-0 w-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-bond-blue focus-visible:ring-offset-2 focus-visible:ring-offset-cream'
+    'group relative isolate h-full min-h-0 w-full cursor-pointer rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-bond-blue focus-visible:ring-offset-2 focus-visible:ring-offset-cream'
 
   const articleChrome = editorial
     ? 'overflow-hidden bg-black'
@@ -44,7 +44,7 @@ export function GiftCard({
           <img
             src={gift.imageUrl}
             alt=""
-            className={`h-full w-full object-cover ${editorial ? '' : 'transition-transform duration-500 group-hover:scale-[1.02]'}`}
+            className={`h-full w-full rounded-none object-cover ${editorial ? '' : 'transition-transform duration-500 group-hover:scale-[1.02]'}`}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-cashmere/85">

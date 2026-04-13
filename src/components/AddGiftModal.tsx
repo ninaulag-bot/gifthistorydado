@@ -204,7 +204,7 @@ export function AddGiftModal({
       aria-modal="true"
       aria-label="Add a Gift"
     >
-      <div className="bg-[#faf9f4] border border-cashmere w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] flex flex-col relative sm:rounded-none rounded-t-2xl">
+      <div className="relative flex max-h-[95vh] w-full max-w-2xl flex-col border border-cashmere bg-[#faf9f4] sm:max-h-[90vh] rounded-none">
         {/* Close */}
         <button
           onClick={onClose}
@@ -245,7 +245,7 @@ export function AddGiftModal({
                         key={d}
                         type="button"
                         onClick={() => setDirection(d)}
-                        className={giftDirToggleBtnClass(d, isActive)}
+                        className={`${giftDirToggleBtnClass(d, isActive)} max-lg:!px-2 max-lg:!py-1.5 max-lg:!text-[11px]`}
                         style={{ letterSpacing: '0.14em' }}
                       >
                         {d === 'given' ? 'GIVEN' : 'RECEIVED'}
@@ -299,7 +299,7 @@ export function AddGiftModal({
                         className="w-full text-left px-3 py-2.5 flex items-center gap-3 hover:bg-cream transition-colors duration-200"
                       >
                         <span
-                          className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${p.avatarColor}`}
+                          className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full ${p.avatarColor}`}
                         >
                           <span className="text-white text-[10px] font-semibold">
                             {p.initials}
@@ -322,7 +322,7 @@ export function AddGiftModal({
                         onClick={handleAddNewPerson}
                         className="w-full text-left px-3 py-2.5 flex items-center gap-3 hover:bg-cream transition-colors duration-200 border-t border-cashmere"
                       >
-                        <span className="w-7 h-7 rounded-full bg-bond-blue/10 flex items-center justify-center flex-shrink-0">
+                        <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-bond-blue/10">
                           <UserPlus
                             className="w-3.5 h-3.5 text-bond-blue"
                             strokeWidth={2}
@@ -515,7 +515,7 @@ export function AddGiftModal({
                           <img
                             src={imageUrl}
                             alt="Gift preview"
-                            className="w-16 h-16 sm:w-20 sm:h-20 object-cover flex-shrink-0"
+                            className="h-16 w-16 flex-shrink-0 rounded-none object-cover sm:h-20 sm:w-20"
                           />
                           <div className="flex-1 min-w-0">
                             <p className="text-midnight text-sm font-medium">
@@ -627,7 +627,7 @@ export function AddGiftModal({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Options group */}
-            <div className="bg-white rounded-2xl overflow-hidden">
+            <div className="overflow-hidden rounded-none bg-white">
               <button
                 type="button"
                 onClick={() => {
@@ -659,7 +659,7 @@ export function AddGiftModal({
             <button
               type="button"
               onClick={() => setShowPhotoSheet(false)}
-              className="w-full mt-2 py-4 text-center bg-white rounded-2xl text-bond-blue text-[17px] font-semibold active:bg-gray-50 transition-colors"
+              className="mt-2 w-full rounded-none bg-white py-4 text-center text-[17px] font-semibold text-bond-blue transition-colors active:bg-gray-50"
             >
               Cancel
             </button>

@@ -15,7 +15,13 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom'
-import { Camera, Image as ImageIcon, UploadCloud, X } from 'lucide-react'
+import {
+  Camera,
+  Image as ImageIcon,
+  Pencil,
+  UploadCloud,
+  X,
+} from 'lucide-react'
 import { GiftItem, GiftPersonalNote, PersonData } from '../data/gifts'
 import {
   giftDirPillClass,
@@ -454,13 +460,13 @@ export function GiftDetailPage({
         </div>
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <div className="relative min-h-[min(52vh,calc(100dvh-8rem))] min-w-0 flex-1 lg:min-h-0 lg:w-1/2 lg:max-w-[50%]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
+        <div className="relative min-w-0 max-lg:h-[min(42vh,380px)] max-lg:max-h-[50vh] max-lg:min-h-[12rem] max-lg:flex-none lg:min-h-0 lg:flex-1 lg:w-1/2 lg:max-w-[50%]">
           {imageSrc ? (
             <img
               src={imageSrc}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full rounded-none object-cover"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-midnight">
@@ -495,18 +501,16 @@ export function GiftDetailPage({
                   e.target.value = ''
                 }}
               />
-              {draft.imageUrl ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setDraft((d) => (d ? { ...d, imageUrl: '' } : d))
-                  }
-                  className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-midnight/75 text-white shadow-md transition-colors hover:bg-midnight"
-                  aria-label="Remove photo"
-                >
-                  <X className="h-4 w-4" strokeWidth={2} />
-                </button>
-              ) : null}
+              <button
+                type="button"
+                onClick={() => setPhotoChangeModalOpen(true)}
+                className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-none bg-midnight text-white shadow-md transition-colors hover:bg-midnight/90 active:bg-midnight/85 lg:hidden"
+                aria-label={
+                  draft.imageUrl ? 'Change photo' : 'Add photo'
+                }
+              >
+                <Pencil className="h-4 w-4" strokeWidth={2} />
+              </button>
 
               {photoChangeModalOpen ? (
                 <div
@@ -518,7 +522,7 @@ export function GiftDetailPage({
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="gift-photo-change-title"
-                    className="relative w-full max-w-md rounded-t-2xl border border-cashmere bg-[#faf9f4] p-5 shadow-xl sm:rounded-lg sm:p-6"
+                    className="relative w-full max-w-md rounded-none border border-cashmere bg-[#faf9f4] p-5 shadow-xl sm:p-6"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
@@ -555,7 +559,7 @@ export function GiftDetailPage({
                           const file = e.dataTransfer.files?.[0]
                           if (file) handleFileSelect(file)
                         }}
-                        className={`flex cursor-pointer flex-col items-center justify-center rounded-sm border-2 border-dashed px-4 py-10 transition-colors ${
+                        className={`flex cursor-pointer flex-col items-center justify-center rounded-none border-2 border-dashed px-4 py-10 transition-colors ${
                           photoDragActive
                             ? 'border-bond-blue bg-bond-blue/5'
                             : 'border-cashmere bg-white hover:border-bond-blue/40'
@@ -572,7 +576,7 @@ export function GiftDetailPage({
                         <p className="mt-2 font-sans text-xs text-gilded">or</p>
                         <button
                           type="button"
-                          className="mt-3 bg-bond-blue px-4 py-2 font-sans text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-bond-blue/90"
+                          className="mt-3 rounded-none bg-bond-blue px-4 py-2 font-sans text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-bond-blue/90"
                           style={labelStyle}
                           onClick={(e) => {
                             e.stopPropagation()
@@ -588,7 +592,7 @@ export function GiftDetailPage({
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="flex w-full items-center justify-center gap-2.5 rounded-sm bg-bond-blue px-4 py-3.5 font-sans text-[15px] font-medium text-white transition-colors active:bg-bond-blue/90"
+                        className="flex w-full items-center justify-center gap-2.5 rounded-none bg-bond-blue px-4 py-3.5 font-sans text-[15px] font-medium text-white transition-colors active:bg-bond-blue/90"
                       >
                         <ImageIcon
                           className="h-5 w-5 shrink-0"
@@ -599,7 +603,7 @@ export function GiftDetailPage({
                       <button
                         type="button"
                         onClick={() => cameraInputRef.current?.click()}
-                        className="flex w-full items-center justify-center gap-2.5 rounded-sm border border-cashmere bg-white px-4 py-3.5 font-sans text-[15px] font-medium text-midnight transition-colors active:bg-cream"
+                        className="flex w-full items-center justify-center gap-2.5 rounded-none border border-cashmere bg-white px-4 py-3.5 font-sans text-[15px] font-medium text-midnight transition-colors active:bg-cream"
                       >
                         <Camera
                           className="h-5 w-5 shrink-0"
@@ -612,7 +616,7 @@ export function GiftDetailPage({
                 </div>
               ) : null}
 
-              <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-cashmere bg-white px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-5">
+              <div className="absolute bottom-0 left-0 right-0 z-20 hidden border-t border-cashmere bg-white px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-5 lg:block">
                 <div className="mx-auto flex w-full max-w-md justify-center sm:max-w-none">
                   <button
                     type="button"
@@ -634,11 +638,63 @@ export function GiftDetailPage({
           </div>
         </div>
 
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col border-t border-cashmere bg-cream lg:w-1/2 lg:max-w-[50%] lg:border-l lg:border-t-0">
-          <div className="min-h-0 flex-1 overflow-y-auto px-6 py-8 sm:px-10 sm:py-10">
+        <div className="flex min-h-0 min-w-0 max-lg:flex-none flex-1 flex-col border-t border-cashmere bg-cream lg:w-1/2 lg:max-w-[50%] lg:border-l lg:border-t-0">
+          <div className="min-h-0 flex-1 overflow-y-auto px-6 py-8 sm:px-10 sm:py-10 max-lg:flex-none max-lg:overflow-visible lg:overflow-y-auto">
             {isEditing && draft ? (
               <>
-                <p className="font-sans text-[11px] font-medium uppercase leading-normal tracking-[0.14em] text-bond-blue/90">
+                <div className="min-w-0">
+                  <span className={popupLabelClass} style={labelStyle}>
+                    From
+                  </span>
+                  <div className="mt-2 min-w-0 space-y-2">
+                    <label className="sr-only" htmlFor="person-name">
+                      Person name
+                    </label>
+                    <input
+                      id="person-name"
+                      type="text"
+                      list={relationshipListId}
+                      value={draft.personName}
+                      onChange={(e) =>
+                        setDraft((d) =>
+                          d ? { ...d, personName: e.target.value } : d,
+                        )
+                      }
+                      placeholder="Name"
+                      className={popupInputClass}
+                    />
+                    <datalist id={relationshipListId}>
+                      {peopleList.map((p) => (
+                        <option key={p.name} value={p.name}>
+                          {p.relationship}
+                        </option>
+                      ))}
+                    </datalist>
+                    <label className="sr-only" htmlFor="relationship">
+                      Relationship
+                    </label>
+                    <input
+                      id="relationship"
+                      type="text"
+                      list={`${relationshipListId}-rel`}
+                      value={draft.relationship}
+                      onChange={(e) =>
+                        setDraft((d) =>
+                          d ? { ...d, relationship: e.target.value } : d,
+                        )
+                      }
+                      placeholder="Relationship"
+                      className={popupInputClass}
+                    />
+                    <datalist id={`${relationshipListId}-rel`}>
+                      {relationshipOptions.map((r) => (
+                        <option key={r} value={r} />
+                      ))}
+                    </datalist>
+                  </div>
+                </div>
+
+                <p className="mt-8 font-sans text-[11px] font-medium uppercase leading-normal tracking-[0.14em] text-bond-blue/90 sm:mt-10">
                   {personLine}
                 </p>
                 <label htmlFor="gift-name" className="sr-only">
@@ -654,10 +710,10 @@ export function GiftDetailPage({
                     )
                   }
                   placeholder="Gift name"
-                  className={`${popupInputClass} mt-3 max-w-full`}
+                  className={`${popupInputClass} mt-2 max-w-full`}
                 />
 
-                <div className="mt-8 space-y-4 sm:mt-10">
+                <div className="mt-5 space-y-3 sm:mt-6">
                   <div>
                     <label
                       className={popupLabelClass}
@@ -758,104 +814,51 @@ export function GiftDetailPage({
                 </div>
 
                 <p
-                  className={`${sectionLabelClass} mt-10`}
+                  className={`${sectionLabelClass} mt-7`}
                   style={labelStyle}
                 >
                   Gift details
                 </p>
-                <div className="mt-4 grid grid-cols-1 gap-6 sm:mt-5 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-8">
-                  <div>
-                    <p className="mb-1 font-sans text-[11px] font-medium normal-case text-gilded">
-                      Given or received?
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setDraft((d) =>
-                            d ? { ...d, direction: 'given' } : d,
-                          )
-                        }
-                        className={giftDirToggleBtnClass(
-                          'given',
-                          draft.direction === 'given',
-                        )}
-                        style={labelStyle}
-                      >
-                        GIVEN
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setDraft((d) =>
-                            d ? { ...d, direction: 'received' } : d,
-                          )
-                        }
-                        className={giftDirToggleBtnClass(
-                          'received',
-                          draft.direction === 'received',
-                        )}
-                        style={labelStyle}
-                      >
-                        RECEIVED
-                      </button>
-                    </div>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <span className={popupLabelClass} style={labelStyle}>
-                      From
-                    </span>
-                    <div className="mt-2 min-w-0 space-y-4">
-                      <label className="sr-only" htmlFor="person-name">
-                        Person name
-                      </label>
-                      <input
-                        id="person-name"
-                        type="text"
-                        list={relationshipListId}
-                        value={draft.personName}
-                        onChange={(e) =>
-                          setDraft((d) =>
-                            d ? { ...d, personName: e.target.value } : d,
-                          )
-                        }
-                        placeholder="Name"
-                        className={popupInputClass}
-                      />
-                      <datalist id={relationshipListId}>
-                        {peopleList.map((p) => (
-                          <option key={p.name} value={p.name}>
-                            {p.relationship}
-                          </option>
-                        ))}
-                      </datalist>
-                      <label className="sr-only" htmlFor="relationship">
-                        Relationship
-                      </label>
-                      <input
-                        id="relationship"
-                        type="text"
-                        list={`${relationshipListId}-rel`}
-                        value={draft.relationship}
-                        onChange={(e) =>
-                          setDraft((d) =>
-                            d ? { ...d, relationship: e.target.value } : d,
-                          )
-                        }
-                        placeholder="Relationship"
-                        className={popupInputClass}
-                      />
-                      <datalist id={`${relationshipListId}-rel`}>
-                        {relationshipOptions.map((r) => (
-                          <option key={r} value={r} />
-                        ))}
-                      </datalist>
-                    </div>
+                <div className="mt-3 sm:mt-3">
+                  <p className="mb-1 font-sans text-[11px] font-medium normal-case text-gilded">
+                    Given or received?
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setDraft((d) =>
+                          d ? { ...d, direction: 'given' } : d,
+                        )
+                      }
+                      className={giftDirToggleBtnClass(
+                        'given',
+                        draft.direction === 'given',
+                      )}
+                      style={labelStyle}
+                    >
+                      GIVEN
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setDraft((d) =>
+                          d ? { ...d, direction: 'received' } : d,
+                        )
+                      }
+                      className={giftDirToggleBtnClass(
+                        'received',
+                        draft.direction === 'received',
+                      )}
+                      style={labelStyle}
+                    >
+                      RECEIVED
+                    </button>
                   </div>
                 </div>
 
                 <section
-                  className="mt-10"
+                  className="mt-7"
                   aria-labelledby="personal-notes-heading"
                 >
                   <div className="flex items-center gap-3">
@@ -873,7 +876,7 @@ export function GiftDetailPage({
                   </div>
 
                   {draft.personalNotes.length > 0 ? (
-                    <ul className="mt-6 list-none space-y-6 p-0">
+                    <ul className="mt-4 list-none space-y-4 p-0">
                       {draft.personalNotes.map((n, idx) => (
                         <li key={n.id}>
                           <label className="sr-only" htmlFor={`note-${n.id}`}>
@@ -926,7 +929,7 @@ export function GiftDetailPage({
                     </p>
                   )}
 
-                  <div className="mt-8">
+                  <div className="mt-5">
                     <label
                       htmlFor="pending-personal-note"
                       className="sr-only"
@@ -1028,7 +1031,7 @@ export function GiftDetailPage({
                     <ul className="mt-6 list-none space-y-4 p-0">
                       {displayPersonalNotes.map((n) => (
                         <li key={n.id}>
-                          <figure className="relative overflow-hidden rounded-sm border border-cashmere bg-white pl-1 pr-5 py-4 sm:pr-6 sm:py-5">
+                          <figure className="relative overflow-hidden rounded-none border border-cashmere bg-white pl-1 pr-5 py-4 sm:pr-6 sm:py-5">
                             <span
                               className="absolute left-0 top-0 h-full w-1 bg-bond-blue"
                               aria-hidden

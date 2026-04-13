@@ -1,4 +1,3 @@
-import { X } from 'lucide-react'
 import { PersonData } from '../data/gifts'
 
 export type SidebarNavigateTo =
@@ -63,22 +62,7 @@ export function Sidebar({
 
   const sidebarContent = (
     <>
-      <div className="lg:hidden flex items-center justify-between px-6 pt-3 pb-1.5 mb-5">
-        <span
-          className={`font-sans text-midnight text-[10px] font-normal uppercase ${sidebarTracking}`}
-        >
-          Menu
-        </span>
-        <button
-          onClick={onClose}
-          className="text-gilded hover:text-midnight transition-colors"
-          aria-label="Close menu"
-        >
-          <X className="w-5 h-5" strokeWidth={1.6} />
-        </button>
-      </div>
-
-      <nav className="mb-6 mt-2 lg:mt-0" aria-label="Gift filters">
+      <nav className="mb-6 mt-0 lg:mt-0" aria-label="Gift filters">
         <button
           type="button"
           onClick={() => {
@@ -219,7 +203,7 @@ export function Sidebar({
       {isOpen && (
         <div className="lg:hidden fixed inset-0 z-40">
           <div className="absolute inset-0 bg-midnight/30" onClick={onClose} />
-          <aside className="absolute left-0 top-0 bottom-0 w-[280px] bg-cream border-r border-bond-blue/35 overflow-y-auto px-6 pt-4 pb-8 shadow-xl font-sans">
+          <aside className="absolute left-0 top-0 bottom-0 w-[280px] bg-cream border-r border-bond-blue/35 overflow-y-auto px-6 pb-8 pt-12 shadow-xl font-sans">
             {sidebarContent}
           </aside>
         </div>

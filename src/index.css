@@ -218,6 +218,11 @@
     letter-spacing: 0.14em !important;
     text-transform: uppercase !important;
   }
+
+  /* Sharp corners: no rounded boxes or form controls by default */
+  :where(button, input:not([type='checkbox']):not([type='radio']), select, textarea) {
+    border-radius: 0;
+  }
 }
 
 html, body {
