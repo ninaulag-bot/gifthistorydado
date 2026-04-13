@@ -45,6 +45,20 @@ export function Relationships({
           const receivedCount = personGifts.filter(
             (g) => g.direction === 'received',
           ).length
+          const renderDirectionCounts = () => (
+            <>
+              <div className={giftDirCountRowClass('given')}>
+                <span style={{ letterSpacing: '0.12em' }}>Given</span>
+                <span className={giftDirCountNumberClass}>{givenCount}</span>
+              </div>
+              <div className={giftDirCountRowClass('received')}>
+                <span style={{ letterSpacing: '0.12em' }}>Received</span>
+                <span className={giftDirCountNumberClass}>
+                  {receivedCount}
+                </span>
+              </div>
+            </>
+          )
           return (
             <article
               key={person.name}
@@ -59,11 +73,14 @@ export function Relationships({
                     {person.initials}
                   </span>
                 </span>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <h3 className="font-cormorant font-normal text-xl text-midnight leading-tight">
                     {person.name}
                   </h3>
                   <p className="text-gilded text-sm">{person.relationship}</p>
+                  <div className="hidden lg:flex flex-wrap items-center gap-3 mt-1.5">
+                    {renderDirectionCounts()}
+                  </div>
                   {person.birthday && (
                     <p className="text-gilded/70 text-xs mt-0.5">
                       🎂 {person.birthday}, 1985
@@ -72,17 +89,8 @@ export function Relationships({
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 mt-4">
-                <div className={giftDirCountRowClass('given')}>
-                  <span style={{ letterSpacing: '0.12em' }}>Given</span>
-                  <span className={giftDirCountNumberClass}>{givenCount}</span>
-                </div>
-                <div className={giftDirCountRowClass('received')}>
-                  <span style={{ letterSpacing: '0.12em' }}>Received</span>
-                  <span className={giftDirCountNumberClass}>
-                    {receivedCount}
-                  </span>
-                </div>
+              <div className="flex lg:hidden items-center gap-3 mt-4">
+                {renderDirectionCounts()}
               </div>
             </article>
           )

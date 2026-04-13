@@ -245,7 +245,7 @@ export function AddGiftModal({
                         key={d}
                         type="button"
                         onClick={() => setDirection(d)}
-                        className={`${giftDirToggleBtnClass(d, isActive)} max-lg:!px-2 max-lg:!py-1.5 max-lg:!text-[11px]`}
+                        className={`${giftDirToggleBtnClass(d, isActive)} max-lg:!px-2 max-lg:!py-1.5 max-lg:!text-[11px] lg:!px-3.5 lg:!py-2.5 lg:!text-[15px]`}
                         style={{ letterSpacing: '0.14em' }}
                       >
                         {d === 'given' ? 'GIVEN' : 'RECEIVED'}

@@ -51,6 +51,21 @@ export function PersonProfile({
       ? personGifts
       : personGifts.filter((g) => g.direction === giftFilter)
 
+  const renderProfileDirectionCounts = () => (
+    <>
+      <div className={giftDirCountRowProfileClass('given')}>
+        <span style={{ letterSpacing: '0.12em' }}>Given</span>
+        <span className={giftDirCountNumberProfileClass}>{givenCount}</span>
+      </div>
+      <div className={giftDirCountRowProfileClass('received')}>
+        <span style={{ letterSpacing: '0.12em' }}>Received</span>
+        <span className={giftDirCountNumberProfileClass}>
+          {receivedCount}
+        </span>
+      </div>
+    </>
+  )
+
   return (
     <div>
       <div className="bg-white">
@@ -73,20 +88,12 @@ export function PersonProfile({
                   <p className="mt-0.5 text-xs leading-snug text-gilded">
                     {person.relationship}
                   </p>
+                  <div className="mt-2 hidden flex-wrap items-center gap-2 lg:flex">
+                    {renderProfileDirectionCounts()}
+                  </div>
                 </div>
-                <div className="flex shrink-0 flex-col gap-2 sm:gap-2.5">
-                  <div className={giftDirCountRowProfileClass('given')}>
-                    <span style={{ letterSpacing: '0.12em' }}>Given</span>
-                    <span className={giftDirCountNumberProfileClass}>
-                      {givenCount}
-                    </span>
-                  </div>
-                  <div className={giftDirCountRowProfileClass('received')}>
-                    <span style={{ letterSpacing: '0.12em' }}>Received</span>
-                    <span className={giftDirCountNumberProfileClass}>
-                      {receivedCount}
-                    </span>
-                  </div>
+                <div className="flex shrink-0 flex-col gap-2 sm:gap-2.5 lg:hidden">
+                  {renderProfileDirectionCounts()}
                 </div>
               </div>
             </div>
