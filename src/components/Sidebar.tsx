@@ -30,8 +30,8 @@ const giftNavRowBase =
 const giftNavRowInactive = `${giftNavRowBase} border-l-transparent text-gilded hover:text-midnight/60`
 const giftNavRowActive = `${giftNavRowBase} border-l-bond-blue text-bond-blue ${sidebarSelectedTint}`
 const sidebarTracking = 'tracking-[0.14em]'
-const navLabelClass = `text-sm uppercase ${sidebarTracking}`
-const navCountClass = `text-[15px] tabular-nums ${sidebarTracking}`
+const navLabelClass = `text-xs uppercase ${sidebarTracking}`
+const navCountClass = `text-[13px] tabular-nums ${sidebarTracking}`
 
 export function Sidebar({
   activeView,
@@ -65,7 +65,7 @@ export function Sidebar({
     <>
       <div className="lg:hidden flex items-center justify-between px-6 pt-3 pb-1.5 mb-5">
         <span
-          className={`font-sans text-midnight text-xs font-normal uppercase ${sidebarTracking}`}
+          className={`font-sans text-midnight text-[10px] font-normal uppercase ${sidebarTracking}`}
         >
           Menu
         </span>
@@ -194,12 +194,12 @@ export function Sidebar({
                 </span>
               </span>
               <span
-                className={`flex-1 text-xs uppercase ${sidebarTracking} ${isActive ? 'font-semibold' : 'font-normal'}`}
+                className={`flex-1 text-[11px] uppercase ${sidebarTracking} ${isActive ? 'font-semibold' : 'font-normal'}`}
               >
                 {person.name}
               </span>
               <span
-                className={`text-[11px] tabular-nums ${sidebarTracking} ${isActive ? 'font-semibold' : 'font-normal'}`}
+                className={`text-[10px] tabular-nums ${sidebarTracking} ${isActive ? 'font-semibold' : 'font-normal'}`}
               >
                 {person.giftCount}
               </span>

@@ -1,0 +1,17 @@
+---
+description: Preserve desktop layout while refining mobile and tablet breakpoints
+globs: src/**/*.{tsx,jsx,css}
+alwaysApply: false
+---
+
+# Mobile & tablet focus (desktop baseline)
+
+- **Desktop is the baseline.** The current `lg:` and wider layouts, typography, and sidebar behavior are intentional; do not change them unless the task explicitly includes desktop.
+- **Prefer additive responsive overrides** instead of editing shared unprefixed classes when only mobile/tablet should change:
+  - Use **`sm:` / `md:`** for tablet-sized adjustments.
+  - Use **`max-lg:`** or **`max-md:`** when something should differ only below desktop.
+  - Use **`lg:`** (and **`xl:`** if needed) to restate or reinforce desktop styles after mobile-first utilities.
+- **Avoid** replacing unprefixed Tailwind classes that currently match desktop unless you also verify small screens—or split with breakpoints so desktop (`lg:`) stays visually identical to before.
+- **Sidebar / sheet / modal patterns:** this app often uses `lg:hidden` / `lg:block` for drawer vs fixed sidebar; keep desktop (`lg+`) behavior when tuning mobile overlays and spacing.
+
+When the user asks for mobile or tablet work, treat **regression on desktop at `lg+`** as a bug unless they say otherwise.
